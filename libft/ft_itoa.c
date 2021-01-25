@@ -35,7 +35,7 @@ char				*ft_itoa(int n)
 
 	dest = NULL;
 	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
+		return (ft_strdup("-2147483648", 0));
 	len = ft_string_size(n);
 	if (!(dest = ft_calloc(len + 1, sizeof(char))))
 		return (dest = ft_calloc(1, sizeof(char)));

@@ -6,7 +6,7 @@
 /*   By: ccroissa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 16:24:46 by ccroissa          #+#    #+#             */
-/*   Updated: 2020/02/19 16:46:22 by ccroissa         ###   ########lyon.fr   */
+/*   Updated: 2021/01/25 16:30:37 by ccroissa         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef	struct			s_convert
 	int					plen;
 	int					ret_val;
 	int					conv_num;
+	int					err;
 	uint8_t				mswitch;
 	uint8_t				zswitch;
 	uint8_t				free_switch;
@@ -52,12 +53,18 @@ typedef	struct			s_convert
 int						ft_printf(const char *format,
 						...) __attribute__((format(printf,1,2)));
 int						atoi_struc(t_conv *t);
+void					strc_init(t_conv *t);
 void					conversion_u(t_conv *t);
+void					conversion_d(t_conv *t);
+void					conversion_xup(t_conv *t);
+void					conversion_x(t_conv *t);
 void					conversion_c(t_conv *t);
 void					conversion_p(t_conv *t);
 void					conversion_perc(t_conv *t);
 void					conversion_call(t_conv *t);
 void					empty_string(t_conv *t);
+void					end_frees(t_conv *t);
+void					str_mflag_zprec(t_conv *t);
 void					get_string(t_conv *t);
 void					nul_char_conv(t_conv *t);
 void					nul_char_output(t_conv *t);

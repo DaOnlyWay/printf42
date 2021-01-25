@@ -6,20 +6,16 @@
 /*   By: ccroissa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 16:25:09 by ccroissa          #+#    #+#             */
-/*   Updated: 2020/02/19 16:26:14 by ccroissa         ###   ########lyon.fr   */
+/*   Updated: 2021/01/25 16:17:39 by ccroissa         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft/libft.h"
+#include <stdio.h>
 
 void	printf_parsing(t_conv *t)
 {
-	t->flag = 'x';
-	t->width = 0;
-	t->prec = -1;
-	t->neg = 0;
-	t->to_conv = 0;
 	if (t->format[t->i] == '%')
 	{
 		while (t->i != t->j - 1 && t->format[t->i])
@@ -34,11 +30,14 @@ void	printf_parsing(t_conv *t)
 		t->len = ft_strlen(t->to_print);
 	}
 	printf_output(t);
+	if (ft_strchr("di", t->conv_char) && ft_strchr("-x", t->flag)
+		&& t->err == 0 && (t->err = 1))
+		free(t->to_print);
 }
 
 void	conversion_call(t_conv *t)
 {
-	if (t->conv_char == 's' && t->prec != 0)
+	if (t->conv_char == 's')
 		get_string(t);
 	else if (t->conv_char == 'c')
 		t->char_to_print = (unsigned char)va_arg(t->argp, int);
@@ -47,13 +46,13 @@ void	conversion_call(t_conv *t)
 	else if (ft_strchr("diuxX", t->conv_char))
 		t->to_conv = va_arg(t->argp, int);
 	if (t->conv_char == 'd' || t->conv_char == 'i')
-		t->to_print = ft_itoa(t->to_conv);
+		conversion_d(t);
 	else if (t->conv_char == 'u')
 		conversion_u(t);
 	else if (t->conv_char == 'x')
-		t->to_print = uitoa_base((unsigned int)t->to_conv, "0123456789abcdef");
+		conversion_x(t);
 	else if (t->conv_char == 'X')
-		t->to_print = uitoa_base((unsigned int)t->to_conv, "0123456789ABCDEF");
+		conversion_xup(t);
 	else if (t->conv_char == 'c')
 		conversion_c(t);
 	else if (t->conv_char == 'p')
@@ -65,8 +64,7 @@ void	conversion_call(t_conv *t)
 
 void	printf_width(t_conv *t)
 {
-	if (((t->format[t->i] == '-' || t->format[t->i] == '0')
-			&& (t->format[t->i + 1] != '-' && t->format[t->i + 1] != '0'))
+	if ((t->format[t->i] == '-' || t->format[t->i] == '0')
 			|| (t->format[t->i] > 47 && t->format[t->i] < 58)
 			|| t->format[t->i] == '*')
 	{
@@ -74,11 +72,18 @@ void	printf_width(t_conv *t)
 		{
 			t->flag = '-';
 			t->i++;
+			if (t->format[t->i] == '0')
+				t->i++;
 		}
-		if (t->format[t->i] == '0')
+		else if (t->conv_char == '%' && t->format[t->i - 1] == '-')
+			t->flag = '-';
+		if (t->format[t->i] == '0' && (t->conv_char != '%'
+			&& t->format[t->i - 1] != '-'))
 		{
 			t->flag = '0';
 			t->i++;
+			if (t->format[t->i] == '-' && (t->flag = '-'))
+				t->i++;
 		}
 		width_arg(t);
 	}
@@ -86,8 +91,6 @@ void	printf_width(t_conv *t)
 
 void	printf_precision(t_conv *t)
 {
-	t->pswitch = 0;
-	t->plen = 0;
 	if (t->format[t->i] == '.')
 	{
 		if (ft_strchr("diuxXs%", t->format[t->i + 1]))

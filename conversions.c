@@ -6,12 +6,13 @@
 /*   By: ccroissa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 16:24:11 by ccroissa          #+#    #+#             */
-/*   Updated: 2020/02/19 16:24:20 by ccroissa         ###   ########lyon.fr   */
+/*   Updated: 2021/01/25 16:02:49 by ccroissa         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "ft_printf.h"
+#include <stdio.h>
 
 void	conversion_u(t_conv *t)
 {
@@ -35,22 +36,25 @@ void	conversion_c(t_conv *t)
 		if (!(t->to_print = ft_calloc(t->width - 2, sizeof(char))) ||
 		(!(t->str = ft_calloc(t->width - 2, sizeof(char)))))
 			return ;
-		t->to_print[0] = t->char_to_print;
+		t->str[0] = 0;
+		t->to_print[0] = (char)0;
 	}
 	else
-	{
 		nul_char_conv(t);
-	}
 }
 
 void	conversion_p(t_conv *t)
 {
 	unsigned long num;
 
-	if (t->adress == NULL && t->pswitch == 1)
+	if (t->adress == NULL || (t->adress == NULL && t->pswitch == 1))
 	{
-		t->to_print = "0x";
-		t->free_switch = 1;
+		if (t->prec == 0)
+			t->to_print = "0x";
+		else
+			t->to_print = "0x0";
+		t->free_switch = (t->flag == '-' && t->to_fill > 0)
+		? 0 : 1;
 	}
 	else
 	{

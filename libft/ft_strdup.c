@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_strdup(const char *src)
+char	*ft_strdup(const char *src, int count)
 {
 	char	*tempsrc;
 	char	*dest;
@@ -32,5 +32,7 @@ char	*ft_strdup(const char *src)
 		i++;
 	}
 	dest[i] = '\0';
+	if (count == 1)
+		free((char*)src);
 	return (dest);
 }

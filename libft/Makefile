@@ -6,7 +6,7 @@
 #    By: ccroissa <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/19 17:09:58 by ccroissa          #+#    #+#              #
-#    Updated: 2020/02/19 17:10:01 by ccroissa         ###   ########lyon.fr    #
+#    Updated: 2021/01/25 11:43:14 by ccroissa         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,12 +62,14 @@ BNS		= ${SRCS:.c=.o}
 
 NAME    = libft.a
 
+GCH			= *.gch
+
 CC      = gcc
 CFLAGS  = -Wall -Wextra -Werror
 
 RM      = rm -f
 
-$(NAME):	${OBJS} ${HEADER} 
+$(NAME):	${OBJS} ${HEADER}
 			${CC} ${CFLAGS} -c ${SRCS}
 			ar rc ${NAME} ${OBJS}
 
@@ -81,7 +83,7 @@ clean:
 	${RM} ${OBJS}
 
 fclean:		clean
-			${RM} ${NAME}
+			${RM} ${NAME} ${GCH}
 
 re:         fclean all
 

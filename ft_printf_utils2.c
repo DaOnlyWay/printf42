@@ -6,12 +6,13 @@
 /*   By: ccroissa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 16:10:30 by ccroissa          #+#    #+#             */
-/*   Updated: 2020/02/19 16:25:41 by ccroissa         ###   ########lyon.fr   */
+/*   Updated: 2021/01/25 16:04:17 by ccroissa         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "ft_printf.h"
+#include <stdio.h>
 
 void	width_arg(t_conv *t)
 {
@@ -35,10 +36,13 @@ void	empty_string(t_conv *t)
 		&& (t->to_conv == 0 || t->to_print[0] == '\0'))
 		|| (t->to_print[0] == '\0' && t->conv_char == 's'))
 	{
+		if (t->to_print[0] == '0' && t->err == 0)
+			free(t->to_print);
+		t->err = 0;
 		if (t->width > 0)
-			t->to_print = ft_strdup(" ");
+			t->to_print = ft_strdup(" ", 0);
 		else if (t->width == 0)
-			t->to_print = ft_strdup("");
+			t->to_print = ft_strdup("", 0);
 	}
 }
 
@@ -51,7 +55,7 @@ void	nul_char_conv(t_conv *t)
 	{
 		if (!(t->str = ft_calloc(2, sizeof(char))))
 			return ;
-		t->str[0] = t->char_to_print;
+		t->str[0] = 0;
 		t->c_zero = 1;
 	}
 }
@@ -67,7 +71,8 @@ void	nul_char_output(t_conv *t)
 	else if (t->char_to_print == 0 && t->width > 1)
 	{
 		t->to_fill--;
-		free(t->to_print);
+		if (t->err == 0 && (t->err = 1))
+			free(t->to_print);
 		t->fill_str = ft_strncat_mod(' ', t->to_fill, t->len);
 		t->str = ft_strcat(t->fill_str, t->str, 2);
 	}

@@ -6,12 +6,13 @@
 /*   By: ccroissa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 16:25:29 by ccroissa          #+#    #+#             */
-/*   Updated: 2020/02/19 16:25:33 by ccroissa         ###   ########lyon.fr   */
+/*   Updated: 2021/01/21 11:32:13 by ccroissa         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "ft_printf.h"
+#include <stdio.h>
 
 void	get_conv(t_conv *t)
 {
